@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   review:
     runs-on: ubuntu-latest
@@ -19,7 +23,7 @@ jobs:
           node-version: '20'
 
       - name: Install OpenCode & AI DevOps
-        run: npm install -g aidevops opencode
+        run: npm install -g opencode-ai
 
       - name: Run Big Pickle Review
         env:
