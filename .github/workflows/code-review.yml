@@ -1,0 +1,36 @@
+name: Big Pickle Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install OpenCode & AI DevOps
+        run: npm install -g aidevops opencode
+
+      - name: Run Big Pickle Review
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+        run: |
+          git diff origin/${{ github.base_ref }}...HEAD > pr_diff.txt
+          
+          opencode run --model opencode/big-pickle \
+            "Review this code change for security, performance, and style: $(cat pr_diff.txt)" > review_feedback.md
+
+      - name: Post Comment to PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          filePath: review_feedback.md
