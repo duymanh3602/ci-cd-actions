@@ -28,7 +28,13 @@ jobs:
           git diff origin/${{ github.base_ref }}...HEAD > pr_diff.txt
           
           opencode run --model opencode/big-pickle \
-            "Review this code change for security, performance, and style: $(cat pr_diff.txt)" > review_feedback.md
+            "Perform a deep reasoning review. 
+             1. Analyze the logic flow of the diff.
+             2. Identify edge cases or potential side effects.
+             3. Provide final recommendations based on your reasoning.
+             
+             Diff to review:
+             $(cat pr_diff.txt)" > review_feedback.md
 
       - name: Post Comment to PR
         uses: thollander/actions-comment-pull-request@v2
