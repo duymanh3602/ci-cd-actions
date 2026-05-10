@@ -19,7 +19,7 @@ jobs:
           node-version: '20'
 
       - name: Install OpenCode & AI DevOps
-        run: npm install -g aidevops opencode
+        run: npm install -g opencode-ai
 
       - name: Run Big Pickle Review
         env:
